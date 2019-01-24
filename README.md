@@ -7,7 +7,7 @@
 - [Consul-Template](https://github.com/hashicorp/consul-template) _OSS_
 - [JQ](https://stedolan.github.io/jq/) _OSS_
 - [NGINX](https://nginx.org/en/) _OSS_
-- SIMPLEGOAPI _I decided to add the code here directly because it's a single file_
+- SIMPLEGOAPI _I decided to add the code here directly because it's a single file_: main.go
 
 ```go
 package main
@@ -34,7 +34,7 @@ func main() {
 }
 ```
 
-**ABOUT GO-API**: You will [need to compile the binary for your architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04#step-4-%E2%80%94-building-executables-for-different-architectures)
+**ABOUT GO-API**: You will [need to compile the binary for your architecture](https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04#step-4-%E2%80%94-building-executables-for-different-architectures) and you will need to make sure you have your [go environment set up correctly](https://golang.org/doc/install). Also, if you want to deploy some other binary, go for it.  
 
 ## Purpose
 We want to use Nomad, Consul, Consul-Template, & NGINX to create a HA service-mesh architecture with containerized and non-containerized applications.
@@ -142,7 +142,7 @@ Again, leverage the inspectRemoteFile script to investigate the contents of the 
 
 If you navigate back to the nomad client from a web browser, you should be able to click on the button and receive the same type of metric data from the go services deployed in your cluster. As before, you should get multiple values for node name, ip, and ports as a different service is requested across all of your nomad clients, regardless of whatever nomad client you made the request from.
 
-_If you don't get multiple values from the goApi services by clicking the button, then you can navigate to http://<yourNomadClientIp>/api and see the data change more readily_
+_If you don't get multiple values from the goApi services by clicking the button, then you can navigate to http://$NOMAD_CLIENT_[0,1,2]/api and see the data change more readily_
 
 ## Let's Bin Pack
 Now we need to check on the bin packing component of nomad. First, let's check the utilization of a service by getting it's allocation id. Run the following:
