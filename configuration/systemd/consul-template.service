@@ -1,0 +1,16 @@
+[Unit]
+Description=Consul template agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/bin/consul-template -template \
+    "/home/<yourUser>/loadBalancer/nginx.conf.tpl:/etc/nginx/conf.d/default.conf:sudo systemctl reload nginx"
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+configuration/jobs/documentation-agent.nomad
+binaries
+terraform.tfstate
+terraform.tfstate.backup
+.terraform
+josh_main.tf
+scripts/consulBinaryDistribution.sh
+scripts/distributeConsulServerD.sh
+scripts/distributeSystemD.sh
+scripts/nomadBinaryDistribution.sh
