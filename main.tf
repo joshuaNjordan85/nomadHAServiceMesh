@@ -1,19 +1,42 @@
-#IF YOU WANTED TO USE A PROVISIONER TO DOWNLOAD AFTER SPIN UP
-variable "consulVersion" {
-  type    = "string"
-  default = "1.4.0"
+data "template_file" "nomad-systemd-server" {
+  template = "${file("${var.localPath}/configuration/templates/systemd/nomad.tpl")}"
+
+  vars {
+    userName = "${var.userName}"
+    hclPath  = "server"
+  }
 }
 
-variable "projectName" {
-  type = "string"
-  default = "change me"
+data "template_file" "nomad-systemd-client" {
+  template = "${file("${var.localPath}/configuration/templates/systemd/nomad.tpl")}"
+
+  vars {
+    userName = "${var.userName}"
+    hclPath  = "client"
+  }
+}
+
+data "template_file" "consul-systemd-server" {
+  template = "${file("${var.localPath}/configuration/templates/systemd/consul-server.tpl")}"
+
+  vars {
+    userName = "${var.userName}"
+  }
+}
+
+data "template_file" "consul-systemd-client" {
+  template = "${file("${var.localPath}/configuration/templates/systemd/consul-client.tpl")}"
+
+  vars {
+    userName = "${var.userName}"
+  }
 }
 
 provider "google" {
-  credentials = "${file("/path/to/your/jwt.json")}"
+  credentials = "${file("/Users/jjordan/Hashicorp/.creds/gcp/jjordan-test-a9bf57f5dfdb.json")}"
   project     = "${var.projectName}"
-  region      = "us-east4"
-  zone        = "us-east4-a"
+  region      = "${var.region}"
+  zone        = "${var.region}-a"
 }
 
 #DATA SOURCES
@@ -56,83 +79,16 @@ resource "google_compute_firewall" "allow-service-access" {
     protocol = "tcp"
     ports    = ["80", "443", "8080"]
   }
- }
-
- #FIREWALLS: SSH
- resource "google_compute_firewall" "allow-ssh" {
-   provider = "google"
-   name = "ssh-east"
-   network = "${data.google_compute_network.east.self_link}"
-
-   allow {
-     protocol = "tcp"
-     ports = ["22"]
-   }
- }
-
-resource "google_compute_instance" "nomad_server" {
-  count        = 3
-  name         = "nomad-server-${count.index}"
-  machine_type = "n1-standard-8"
-  zone         = "${data.google.region}-a"
-  tags         = ["nomad-server", "webinar", "consul-client", "http-server"]
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-9"
-    }
-  }
-
-  network_interface {
-    network = "default"
-
-    access_config {
-      // Include this section to give the VM an external ip address
-    }
-  }
 }
 
-// A single Google Cloud Engine instance
-resource "google_compute_instance" "consul-server" {
-  count        = 3
-  name         = "consul-server-${count.index}"
-  machine_type = "n1-standard-2"
-  zone         = "${data.google.region}-a"
-  tags         = ["consul-server", "webinar", "http-server"]
+#FIREWALLS: SSH
+resource "google_compute_firewall" "allow-ssh" {
+  provider = "google"
+  name     = "ssh-east"
+  network  = "${data.google_compute_network.east.self_link}"
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-9"
-    }
-  }
-
-  network_interface {
-    network = "default"
-
-    access_config {
-      // Include this section to give the VM an external ip address
-    }
-  }
-}
-
-resource "google_compute_instance" "nomad_client" {
-  count        = 3
-  name         = "nomad-client-${count.index}"
-  machine_type = "n1-standard-2"
-  zone         = "${data.google.region}-a"
-  tags         = ["nomad-client", "webinar", "consul-client", "http-server"]
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-9"
-    }
-  }
-
-  network_interface {
-    network = "default"
-
-    access_config {
-      // Include this section to give the VM an external ip address
-    }
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
   }
 }

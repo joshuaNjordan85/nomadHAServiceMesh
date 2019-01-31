@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 ExecStart=/bin/consul agent \
-    -config-file=/home/<yourUser>/consul.d/server.json
+    -config-file=/home/${userName}/consul.d/server.json
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
 KillSignal=SIGTERM

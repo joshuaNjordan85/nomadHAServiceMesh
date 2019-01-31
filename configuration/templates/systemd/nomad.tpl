@@ -3,11 +3,11 @@ Description="HashiCorp Nomad - An application and service scheduler"
 Documentation=https://www.nomad.io/docs/
 Requires=network-online.target
 After=network-online.target
-ConditionFileNotEmpty=/home/<yourUser>/nomad.d/<client || server>.hcl
+ConditionFileNotEmpty=/home/${userName}/nomad.d/${hclPath}.hcl
 
 [Service]
-User=<yourUser>
-ExecStart=/bin/nomad agent -config=/home/<yourUser>/nomad.d/
+User=${userName}
+ExecStart=/bin/nomad agent -config=/home/${userName}/nomad.d/
 ExecReload=/bin/kill --signal HUP $MAINPID
 KillMode=process
 Restart=on-failure
