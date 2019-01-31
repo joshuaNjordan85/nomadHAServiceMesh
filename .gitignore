@@ -1,9 +1,12 @@
 configuration/jobs/documentation-agent.nomad
 binaries
+zips
 terraform.tfstate
 terraform.tfstate.backup
 .terraform
 josh_main.tf
+hardCodedVars
+configuration/jobs/loadBalancer.nomad
 scripts/consulBinaryDistribution.sh
 scripts/distributeConsulServerD.sh
 scripts/distributeSystemD.sh

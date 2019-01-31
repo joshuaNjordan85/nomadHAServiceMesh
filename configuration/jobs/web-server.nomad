@@ -2,7 +2,7 @@ job "web-server" {
     datacenters = ["dc1"]
     type = "service"
     group "web-stack" {
-      count = 15
+      count = 81
       task "runWebAppInstance" {
         template {
           data = <<EOH
@@ -119,6 +119,7 @@ job "web-server" {
 
         resources {
           cpu = 20
+          memory = 10
           network {
             port "http" {}
           }
